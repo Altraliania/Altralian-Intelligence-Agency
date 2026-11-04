@@ -35,12 +35,17 @@ function safeEqual(left, right) {
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
+// Production must never start with the access password missing.
+if (process.env.NODE_ENV === "production" && !process.env.AIA_ACCESS_PASSWORD) {
+  throw new Error("AIA_ACCESS_PASSWORD must be configured in the hosting environment.");
+}
+
 // When AIA_ACCESS_PASSWORD is configured, the browser requests a login
 // before serving either the website or its API. Local development can omit it.
 function isAuthorized(req) {
   if (!process.env.AIA_ACCESS_PASSWORD) return true;
   const header = req.headers.authorization || "";
-  const match = header.match(/^Basic\\s+(.+)$/i);
+  const match = header.match(/^Basic\s+(.+)$/i);
   if (!match) return false;
 
   let decoded;
