@@ -1,0 +1,1827 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0d12">
+
+  <title>AIA — Personnel Records</title>
+
+  <!-- AIA logo as the browser tab favicon -->
+  <link rel="icon" type="image/png" href="/AIA-Logo.png">
+  <link rel="apple-touch-icon" href="/AIA-Logo.png">
+
+  <style>
+    :root {
+      --bg: #0a0d12;
+      --panel: #111720;
+      --panel2: #151d28;
+      --border: #273241;
+      --text: #e8edf5;
+      --muted: #8c9aab;
+      --accent: #5ca8ff;
+      --accent2: #2676d2;
+      --green: #43c99a;
+      --yellow: #f3c969;
+      --red: #f07878;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+    }
+
+    header {
+      height: 72px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: #0d1219;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .brand h1 {
+      font-size: 17px;
+      margin: 0;
+      letter-spacing: 1.4px;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .online-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 245px minmax(0, 1fr);
+      min-height: calc(100vh - 72px);
+    }
+
+    aside {
+      padding: 24px 16px;
+      background: #0d1219;
+      border-right: 1px solid var(--border);
+    }
+
+    .nav-label {
+      margin: 0 10px 10px;
+      font-size: 10px;
+      color: #758397;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 11px 12px;
+      margin-bottom: 5px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: #aab6c6;
+      text-align: left;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      color: var(--text);
+      background: #172333;
+      border-color: #263e58;
+    }
+
+    .nav-item.active {
+      box-shadow: inset 3px 0 var(--accent);
+    }
+
+    .nav-icon {
+      width: 19px;
+      text-align: center;
+      color: var(--accent);
+    }
+
+    .sidebar-card {
+      margin-top: 32px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: var(--radius);
+    }
+
+    .sidebar-card strong {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-card p {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 0;
+    }
+
+    main {
+      padding: 30px;
+      min-width: 0;
+      max-width: 1600px;
+      width: 100%;
+    }
+
+    .page-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 27px;
+      margin: 5px 0;
+      font-weight: 650;
+      letter-spacing: -.5px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: var(--panel2);
+      padding: 9px 13px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+    }
+
+    .btn.primary {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: white;
+    }
+
+    .btn.danger {
+      color: var(--red);
+      border-color: #60383c;
+      background: #24171b;
+    }
+
+    .btn.small {
+      padding: 6px 9px;
+      font-size: 11px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 17px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .stat-value {
+      font-size: 27px;
+      font-weight: 700;
+      margin: 8px 0 2px;
+    }
+
+    .stat-note {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, .95fr) minmax(360px, 1.3fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 17px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-header h3 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .panel-body {
+      padding: 18px;
+    }
+
+    .panel-count {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background: #0b1017;
+      border: 1px solid #2a3544;
+      border-radius: 7px;
+      color: var(--text);
+      padding: 10px 11px;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: #647285;
+    }
+
+    select option {
+      background: var(--panel);
+    }
+
+    .people-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 650px;
+      overflow-y: auto;
+    }
+
+    .person-item {
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #101620;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+
+    .person-item:hover,
+    .person-item.selected {
+      border-color: var(--accent);
+      background: #152235;
+    }
+
+    .person-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .person-name {
+      font-weight: 650;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .person-meta {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .person-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 11px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 7px;
+      border-radius: 5px;
+      background: #202b39;
+      color: #b8c8da;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .badge.active {
+      color: var(--green);
+      background: #153128;
+    }
+
+    .badge.inactive {
+      color: #aab5c2;
+      background: #252c35;
+    }
+
+    .badge.review {
+      color: var(--yellow);
+      background: #352d1a;
+    }
+
+    .empty-state {
+      padding: 35px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .empty-state strong {
+      display: block;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .profile-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .profile-title {
+      font-size: 21px;
+      font-weight: 700;
+      margin: 0 0 5px;
+      overflow-wrap: anywhere;
+    }
+
+    .profile-id {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .section-title {
+      margin: 22px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: #b9c9dc;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .section-title:first-child {
+      margin-top: 0;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .detail-label {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      font-size: 12px;
+    }
+
+    .text-block {
+      background: #0d131c;
+      border: 1px solid #222e3c;
+      border-radius: 8px;
+      padding: 12px;
+      color: #c3cedb;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 12px;
+      min-height: 48px;
+    }
+
+    .record-entry {
+      padding: 12px;
+      margin-bottom: 8px;
+      background: #0d131c;
+      border: 1px solid #222e3c;
+      border-radius: 8px;
+    }
+
+    .record-entry:last-child {
+      margin-bottom: 0;
+    }
+
+    .record-entry strong {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .record-entry p {
+      margin: 0;
+      color: #c1ccda;
+      font-size: 12px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .record-entry small {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .custom-field {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid #222c39;
+    }
+
+    .custom-field:last-child {
+      border-bottom: none;
+    }
+
+    .custom-field strong {
+      color: var(--muted);
+      font-size: 11px;
+      min-width: 90px;
+    }
+
+    .custom-field span {
+      text-align: right;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .notice {
+      border: 1px solid #5b4b25;
+      background: #282316;
+      color: #e9d59d;
+      border-radius: 8px;
+      padding: 11px 13px;
+      margin-bottom: 18px;
+      font-size: 11px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, .75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal {
+      width: min(760px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #111821;
+      border: 1px solid #344255;
+      border-radius: 13px;
+      box-shadow: 0 20px 80px #0009;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 19px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      color: var(--muted);
+      border: 0;
+      background: transparent;
+      font-size: 24px;
+    }
+
+    .modal-content {
+      padding: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .form-field label {
+      display: block;
+      margin-bottom: 6px;
+      color: #b9c6d6;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    textarea {
+      min-height: 95px;
+      resize: vertical;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      padding: 16px 22px;
+      border-top: 1px solid var(--border);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 200;
+      max-width: min(400px, calc(100vw - 40px));
+      padding: 12px 16px;
+      background: #17352d;
+      color: #baf1dd;
+      border: 1px solid #2d745e;
+      border-radius: 9px;
+      box-shadow: 0 8px 30px #0006;
+    }
+
+    .toast.error {
+      background: #351b20;
+      color: #ffd2d2;
+      border-color: #84434b;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      color: #68788c;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    @media (max-width: 1100px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .people-list {
+        max-height: 350px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      header {
+        padding: 0 15px;
+      }
+
+      .header-right {
+        display: none;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        padding: 10px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+      }
+
+      aside .nav-label,
+      .sidebar-card {
+        display: none;
+      }
+
+      .nav-item {
+        white-space: nowrap;
+        width: auto;
+        margin: 0;
+        padding: 9px 11px;
+      }
+
+      main {
+        padding: 18px 13px;
+      }
+
+      .page-heading {
+        flex-direction: column;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .detail-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-field.full {
+        grid-column: auto;
+      }
+
+      h2 {
+        font-size: 23px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      header, aside, .actions, .stats, .filters,
+      .people-list, .footer-note, .notice,
+      .profile-top .actions, .modal-backdrop {
+        display: none !important;
+      }
+
+      .layout, .content-grid {
+        display: block;
+      }
+
+      main {
+        padding: 0;
+        max-width: none;
+      }
+
+      .panel, .stat-card {
+        background: white;
+        color: black;
+        border: 1px solid #bbb;
+        break-inside: avoid;
+      }
+
+      .panel-header, .section-title {
+        border-color: #bbb;
+      }
+
+      .detail-label, .profile-id, .subtitle,
+      .text-block, .record-entry p,
+      .custom-field strong, .panel-count {
+        color: #333;
+      }
+
+      .text-block, .record-entry {
+        background: white;
+        border-color: #bbb;
+      }
+
+      .badge {
+        border: 1px solid #aaa;
+        background: white !important;
+        color: black !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <header>
+    <div class="brand">
+      <img src="/AIA-Logo.png" alt="AIA logo"
+           onerror="this.style.display='none'">
+      <div>
+        <h1>AIA</h1>
+        <p>Altralian Intelligence Agency</p>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <span><span class="online-dot"></span>LOCAL SYSTEM</span>
+      <span id="headerClock">Personnel Records</span>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <aside>
+      <p class="nav-label">Workspace</p>
+
+      <button class="nav-item active" data-view="dashboard">
+        <span class="nav-icon">▦</span> Dashboard
+      </button>
+
+      <button class="nav-item" data-view="people">
+        <span class="nav-icon">♙</span> Personnel Records
+      </button>
+
+      <button class="nav-item" data-view="activity">
+        <span class="nav-icon">≡</span> Case Activity
+      </button>
+
+      <div class="sidebar-card">
+        <strong>SYSTEM</strong>
+        <p>This Agency stores its records through your local Node.js server.</p>
+      </div>
+    </aside>
+
+    <main>
+      <div class="page-heading">
+        <div>
+          <div class="eyebrow">Records Management System</div>
+          <h2 id="pageTitle">Personnel Dashboard</h2>
+          <p class="subtitle" id="pageSubtitle">
+            Manage  personnel profiles and associated records.
+          </p>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="exportBtn">Export JSON</button>
+          <button class="btn" id="printBtn">Print / PDF</button>
+          <button class="btn primary" id="addPersonBtn">+ Add Person</button>
+        </div>
+      </div>
+
+      <section class="stats" id="stats">
+        <div class="stat-card">
+          <div class="stat-label">Total Profiles</div>
+          <div class="stat-value" id="totalCount">0</div>
+          <div class="stat-note">All saved profiles</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Active</div>
+          <div class="stat-value" id="activeCount">0</div>
+          <div class="stat-note">Marked as active</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Under Review</div>
+          <div class="stat-value" id="reviewCount">0</div>
+          <div class="stat-note">Marked for review</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Case Entries</div>
+          <div class="stat-value" id="activityCount">0</div>
+          <div class="stat-note">Saved activity entries</div>
+        </div>
+      </section>
+
+      <section class="content-grid" id="dashboardView">
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Personnel Directory</h3>
+            <span class="panel-count" id="peopleCount">0 records</span>
+          </div>
+
+          <div class="panel-body">
+            <div class="filters">
+              <input id="searchInput" type="search"
+                     placeholder="Search profiles...">
+              <select id="statusFilter" aria-label="Filter by status">
+                <option value="all">All statuses</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Under Review">Under Review</option>
+              </select>
+            </div>
+
+            <div class="people-list" id="peopleList">
+              <div class="empty-state">
+                <strong>No profiles yet</strong>
+                Add a person to begin.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="profilePanel">
+          <div class="panel-header">
+            <h3>Personnel Profile</h3>
+            <span class="panel-count" id="profileRecordId">No selection</span>
+          </div>
+
+          <div class="panel-body" id="profileContent">
+            <div class="empty-state">
+              <strong>Select a profile</strong>
+              Choose a record from the directory or add a new  al person.
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="panel hidden" id="activityView">
+        <div class="panel-header">
+          <h3>Case Activity Overview</h3>
+          <span class="panel-count">All profiles</span>
+        </div>
+        <div class="panel-body" id="allActivity">
+          <div class="empty-state">
+            <strong>No activity entries</strong>
+            Add case activity to a  al profile to see it here.
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        AIA • ALTRALIAN INTELLIGENCE AGENCY •  UNITED TERRITORIES OF THE ALTRALIAN REPUBLIC
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Add/edit person modal -->
+<div class="modal-backdrop hidden" id="personModal">
+  <form class="modal" id="personForm">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Person</h3>
+      <button type="button" class="close-btn" data-close="personModal"
+              aria-label="Close">&times;</button>
+    </div>
+
+    <div class="modal-content">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="fullName">Full Name *</label>
+          <input id="fullName" name="name" required maxlength="120"
+                 placeholder=" al name">
+        </div>
+
+        <div class="form-field">
+          <label for="recordId">Record ID</label>
+          <input id="recordId" name="recordId" maxlength="50"
+                 placeholder="Automatically generated if blank">
+        </div>
+
+        <div class="form-field">
+          <label for="role">Role / Position</label>
+          <input id="role" name="role" maxlength="120"
+                 placeholder="e.g. Analyst">
+        </div>
+
+        <div class="form-field">
+          <label for="department">Department</label>
+          <input id="department" name="department" maxlength="120"
+                 placeholder="e.g. Research Division">
+        </div>
+
+        <div class="form-field">
+          <label for="status">Record Status</label>
+          <select id="status" name="status">
+            <option>Active</option>
+            <option>Inactive</option>
+            <option>Under Review</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="clearance">Agency Clearance</label>
+          <select id="clearance" name="clearance">
+            <option>Unassigned</option>
+            <option>Level 1</option>
+            <option>Level 2</option>
+            <option>Level 3</option>
+            <option>Level 4</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="location">Assigned Location</label>
+          <input id="location" name="location" maxlength="160"
+                 placeholder=" al office or region">
+        </div>
+
+        <div class="form-field">
+          <label for="createdDate">Record Date</label>
+          <input id="createdDate" name="createdDate" type="date">
+        </div>
+
+        <div class="form-field full">
+          <label for="background">Background &amp; History</label>
+          <textarea id="background" name="background"
+                    placeholder=" al biography or role history"></textarea>
+        </div>
+
+        <div class="form-field full">
+          <label for="issues">Ongoing Issues / Follow-ups</label>
+          <textarea id="issues" name="issues"
+                    placeholder=" administrative notes or follow-ups"></textarea>
+        </div>
+
+        <div class="form-field full">
+          <label for="notes">General Notes</label>
+          <textarea id="notes" name="notes"
+                    placeholder="Additional  Agency notes"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn" data-close="personModal">Cancel</button>
+      <button type="submit" class="btn primary">Save Record</button>
+    </div>
+  </form>
+</div>
+
+<!-- Add case activity modal -->
+<div class="modal-backdrop hidden" id="activityModal">
+  <form class="modal" id="activityForm">
+    <div class="modal-header">
+      <h3>Add Case Activity</h3>
+      <button type="button" class="close-btn" data-close="activityModal"
+              aria-label="Close">&times;</button>
+    </div>
+
+    <div class="modal-content">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="activityDate">Date *</label>
+          <input id="activityDate" name="date" type="date" required>
+        </div>
+
+        <div class="form-field">
+          <label for="activityType">Entry Type</label>
+          <select id="activityType" name="type">
+            <option>General Update</option>
+            <option>Administrative</option>
+            <option>Meeting</option>
+            <option>Follow-up</option>
+            <option>Resolution</option>
+          </select>
+        </div>
+
+        <div class="form-field full">
+          <label for="activityTitle">Title *</label>
+          <input id="activityTitle" name="title" required maxlength="160"
+                 placeholder="Activity title">
+        </div>
+
+        <div class="form-field full">
+          <label for="activityDescription">Description *</label>
+          <textarea id="activityDescription" name="description" required
+                    placeholder="Describe the  Agency activity"></textarea>
+        </div>
+
+        <div class="form-field full">
+          <label for="activityAuthor">Recorded By</label>
+          <input id="activityAuthor" name="author" maxlength="100"
+                 placeholder="Optional Agency username">
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn" data-close="activityModal">Cancel</button>
+      <button type="submit" class="btn primary">Save Activity</button>
+    </div>
+  </form>
+</div>
+
+<!-- Add custom field modal -->
+<div class="modal-backdrop hidden" id="customModal">
+  <form class="modal" id="customForm">
+    <div class="modal-header">
+      <h3>Add Custom Field</h3>
+      <button type="button" class="close-btn" data-close="customModal"
+              aria-label="Close">&times;</button>
+    </div>
+
+    <div class="modal-content">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="customLabel">Field Name *</label>
+          <input id="customLabel" name="label" required maxlength="80"
+                 placeholder="e.g. Agency Team">
+        </div>
+
+        <div class="form-field">
+          <label for="customValue">Field Value *</label>
+          <input id="customValue" name="value" required maxlength="500"
+                 placeholder=" value">
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn" data-close="customModal">Cancel</button>
+      <button type="submit" class="btn primary">Add Field</button>
+    </div>
+  </form>
+</div>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script>
+  const API = "/api/people";
+
+  let people = [];
+  let selectedId = null;
+  let editingId = null;
+  let currentView = "dashboard";
+  let toastTimer = null;
+
+  const $ = (selector) => document.querySelector(selector);
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+  }
+
+  function today() {
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  }
+
+  function makeId() {
+    return "AIA-" + Date.now().toString(36).toUpperCase()
+      + "-" + Math.random().toString(36).slice(2, 6).toUpperCase();
+  }
+
+  function showToast(message, error = false) {
+    const toast = $("#toast");
+    toast.textContent = message;
+    toast.classList.toggle("error", error);
+    toast.classList.remove("hidden");
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.add("hidden"), 3500);
+  }
+
+  async function apiRequest(url, options = {}) {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      }
+    });
+
+    if (!response.ok) {
+      let message = "Request failed (" + response.status + ").";
+      try {
+        const body = await response.json();
+        if (body.error) message = body.error;
+      } catch {}
+      throw new Error(message);
+    }
+
+    if (response.status === 204) return null;
+    return response.json();
+  }
+
+  function normalizePerson(person) {
+    return {
+      ...person,
+      id: String(person.id || person.recordId || makeId()),
+      name: String(person.name || ""),
+      role: String(person.role || ""),
+      department: String(person.department || ""),
+      status: String(person.status || "Active"),
+      clearance: String(person.clearance || "Unassigned"),
+      location: String(person.location || ""),
+      createdDate: String(person.createdDate || ""),
+      background: String(person.background || ""),
+      issues: String(person.issues || ""),
+      notes: String(person.notes || ""),
+      activities: Array.isArray(person.activities) ? person.activities : [],
+      customFields: Array.isArray(person.customFields) ? person.customFields : []
+    };
+  }
+
+  async function loadPeople() {
+    try {
+      const data = await apiRequest(API);
+      people = (Array.isArray(data) ? data : []).map(normalizePerson);
+
+      if (selectedId && !people.some(p => p.id === selectedId)) {
+        selectedId = null;
+      }
+
+      renderAll();
+    } catch (error) {
+      showToast(
+        "Could not connect to the local server. Start it with node server.js. " +
+        error.message,
+        true
+      );
+
+      people = [];
+      renderAll();
+    }
+  }
+
+  async function savePerson(person, isNew) {
+    const url = isNew
+      ? API
+      : API + "/" + encodeURIComponent(person.id);
+
+    const saved = await apiRequest(url, {
+      method: isNew ? "POST" : "PUT",
+      body: JSON.stringify(person)
+    });
+
+    const normalized = normalizePerson(saved || person);
+    const index = people.findIndex(p => p.id === normalized.id);
+
+    if (index >= 0) people[index] = normalized;
+    else people.unshift(normalized);
+
+    selectedId = normalized.id;
+    renderAll();
+    return normalized;
+  }
+
+  async function deletePerson(id) {
+    const person = people.find(p => p.id === id);
+    if (!person) return;
+
+    if (!confirm("Delete the  record for " + person.name + "?")) {
+      return;
+    }
+
+    try {
+      await apiRequest(API + "/" + encodeURIComponent(id), {
+        method: "DELETE"
+      });
+
+      people = people.filter(p => p.id !== id);
+      if (selectedId === id) selectedId = null;
+
+      renderAll();
+      showToast("Record deleted.");
+    } catch (error) {
+      showToast("Could not delete record: " + error.message, true);
+    }
+  }
+
+  function renderAll() {
+    renderStats();
+    renderPeopleList();
+    renderProfile();
+    renderActivityOverview();
+  }
+
+  function renderStats() {
+    $("#totalCount").textContent = people.length;
+    $("#activeCount").textContent =
+      people.filter(p => p.status === "Active").length;
+    $("#reviewCount").textContent =
+      people.filter(p => p.status === "Under Review").length;
+
+    $("#activityCount").textContent = people.reduce(
+      (sum, person) => sum + person.activities.length, 0
+    );
+
+    $("#peopleCount").textContent =
+      people.length + (people.length === 1 ? " record" : " records");
+  }
+
+  function badgeClass(status) {
+    if (status === "Active") return "active";
+    if (status === "Under Review") return "review";
+    return "inactive";
+  }
+
+  function renderPeopleList() {
+    const query = $("#searchInput").value.trim().toLowerCase();
+    const filter = $("#statusFilter").value;
+
+    const filtered = people.filter(person => {
+      const searchable = [
+        person.name, person.id, person.role,
+        person.department, person.location
+      ].join(" ").toLowerCase();
+
+      return searchable.includes(query)
+        && (filter === "all" || person.status === filter);
+    });
+
+    if (!filtered.length) {
+      $("#peopleList").innerHTML = `
+        <div class="empty-state">
+          <strong>${people.length ? "No matching profiles" : "No profiles yet"}</strong>
+          ${people.length
+            ? "Try a different search or status filter."
+            : "Click Add Person to create a  profile."}
+        </div>`;
+      return;
+    }
+
+    $("#peopleList").innerHTML = filtered.map(person => `
+      <div class="person-item ${person.id === selectedId ? "selected" : ""}"
+           data-person-id="${escapeHTML(person.id)}" tabindex="0"
+           role="button" aria-label="Open ${escapeHTML(person.name)}">
+        <div class="person-top">
+          <div>
+            <div class="person-name">${escapeHTML(person.name)}</div>
+            <div class="person-meta">${escapeHTML(person.id)}</div>
+          </div>
+          <span class="badge ${badgeClass(person.status)}">
+            ${escapeHTML(person.status)}
+          </span>
+        </div>
+        <div class="person-bottom">
+          <span class="person-meta">
+            ${escapeHTML(person.role || "No role assigned")}
+          </span>
+          <span class="person-meta">
+            ${person.activities.length} entries
+          </span>
+        </div>
+      </div>
+    `).join("");
+
+    document.querySelectorAll("[data-person-id]").forEach(element => {
+      const select = () => {
+        selectedId = element.dataset.personId;
+        renderPeopleList();
+        renderProfile();
+      };
+
+      element.addEventListener("click", select);
+      element.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          select();
+        }
+      });
+    });
+  }
+
+  function detail(label, value) {
+    return `
+      <div>
+        <div class="detail-label">${escapeHTML(label)}</div>
+        <div class="detail-value">${escapeHTML(value || "—")}</div>
+      </div>`;
+  }
+
+  function renderProfile() {
+    const person = people.find(p => p.id === selectedId);
+
+    if (!person) {
+      $("#profileRecordId").textContent = "No selection";
+      $("#profileContent").innerHTML = `
+        <div class="empty-state">
+          <strong>Select a profile</strong>
+          Choose a record from the directory or add a new  person.
+        </div>`;
+      return;
+    }
+
+    $("#profileRecordId").textContent = person.id;
+
+    const activities = [...person.activities].reverse();
+
+    $("#profileContent").innerHTML = `
+      <div class="profile-top">
+        <div>
+          <h3 class="profile-title">${escapeHTML(person.name)}</h3>
+          <div class="profile-id">${escapeHTML(person.id)}</div>
+          <div style="margin-top:9px">
+            <span class="badge ${badgeClass(person.status)}">
+              ${escapeHTML(person.status)}
+            </span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn small" id="editPersonBtn">Edit</button>
+          <button class="btn small danger" id="deletePersonBtn">Delete</button>
+        </div>
+      </div>
+
+      <div class="section-title">Profile Details</div>
+      <div class="detail-grid">
+        ${detail("Role / Position", person.role)}
+        ${detail("Department", person.department)}
+        ${detail("Agency Clearance", person.clearance)}
+        ${detail("Assigned Location", person.location)}
+        ${detail("Record Date", person.createdDate)}
+        ${detail("Record ID", person.id)}
+      </div>
+
+      <div class="section-title">Background &amp; History</div>
+      <div class="text-block">${escapeHTML(person.background || "No background information added.")}</div>
+
+      <div class="section-title">Ongoing Issues / Follow-ups</div>
+      <div class="text-block">${escapeHTML(person.issues || "No follow-ups recorded.")}</div>
+
+      <div class="section-title">General Notes</div>
+      <div class="text-block">${escapeHTML(person.notes || "No general notes added.")}</div>
+
+      <div class="section-title">
+        Case Activity
+        <button class="btn small" id="addActivityBtn"
+                style="float:right;margin-top:-7px">+ Add Entry</button>
+      </div>
+
+      <div id="profileActivities">
+        ${activities.length ? activities.map(entry => `
+          <div class="record-entry">
+            <strong>${escapeHTML(entry.title || "Untitled activity")}</strong>
+            <p>${escapeHTML(entry.description || "")}</p>
+            <small>
+              ${escapeHTML(entry.date || "No date")}
+              · ${escapeHTML(entry.type || "General Update")}
+              ${entry.author ? " · Recorded by " + escapeHTML(entry.author) : ""}
+            </small>
+            <button class="btn small danger"
+                    style="margin-top:9px"
+                    data-delete-activity="${escapeHTML(entry.id)}">
+              Delete entry
+            </button>
+          </div>
+        `).join("") : `
+          <div class="empty-state">
+            <strong>No activity entries</strong>
+            Add an entry to keep track of  Agency updates.
+          </div>`}
+      </div>
+
+      <div class="section-title">
+        Custom Fields
+        <button class="btn small" id="addCustomBtn"
+                style="float:right;margin-top:-7px">+ Add Field</button>
+      </div>
+
+      <div id="customFields">
+        ${person.customFields.length ? person.customFields.map(field => `
+          <div class="custom-field">
+            <strong>${escapeHTML(field.label)}</strong>
+            <span>${escapeHTML(field.value)}</span>
+            <button class="btn small danger"
+                    data-delete-custom="${escapeHTML(field.id)}">×</button>
+          </div>
+        `).join("") : `
+          <div class="empty-state">
+            No custom fields. Add fields for your  Agency.
+          </div>`}
+      </div>
+    `;
+
+    $("#editPersonBtn").addEventListener("click", () => openPersonModal(person));
+    $("#deletePersonBtn").addEventListener("click", () => deletePerson(person.id));
+    $("#addActivityBtn").addEventListener("click", openActivityModal);
+    $("#addCustomBtn").addEventListener("click", openCustomModal);
+
+    document.querySelectorAll("[data-delete-activity]").forEach(button => {
+      button.addEventListener("click", () =>
+        removeActivity(person.id, button.dataset.deleteActivity));
+    });
+
+    document.querySelectorAll("[data-delete-custom]").forEach(button => {
+      button.addEventListener("click", () =>
+        removeCustomField(person.id, button.dataset.deleteCustom));
+    });
+  }
+
+  function renderActivityOverview() {
+    const entries = [];
+
+    people.forEach(person => {
+      person.activities.forEach(activity => {
+        entries.push({ ...activity, personName: person.name, personId: person.id });
+      });
+    });
+
+    entries.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+
+    if (!entries.length) {
+      $("#allActivity").innerHTML = `
+        <div class="empty-state">
+          <strong>No activity entries</strong>
+          Add case activity to a  profile to see it here.
+        </div>`;
+      return;
+    }
+
+    $("#allActivity").innerHTML = entries.map(entry => `
+      <div class="record-entry">
+        <strong>${escapeHTML(entry.title || "Untitled activity")}</strong>
+        <p>${escapeHTML(entry.description || "")}</p>
+        <small>
+          ${escapeHTML(entry.date || "No date")}
+          · ${escapeHTML(entry.type || "General Update")}
+          · ${escapeHTML(entry.personName)}
+          · ${escapeHTML(entry.personId)}
+        </small>
+        <button class="btn small" style="margin-top:9px"
+                data-open-activity-person="${escapeHTML(entry.personId)}">
+          Open Profile
+        </button>
+      </div>
+    `).join("");
+
+    document.querySelectorAll("[data-open-activity-person]").forEach(button => {
+      button.addEventListener("click", () => {
+        selectedId = button.dataset.openActivityPerson;
+        switchView("dashboard");
+        renderAll();
+      });
+    });
+  }
+
+  function openModal(id) {
+    $("#" + id).classList.remove("hidden");
+  }
+
+  function closeModal(id) {
+    $("#" + id).classList.add("hidden");
+  }
+
+  function openPersonModal(person = null) {
+    editingId = person ? person.id : null;
+    $("#personForm").reset();
+    $("#modalTitle").textContent = person ? "Edit Person" : "Add Person";
+
+    $("#createdDate").value = person?.createdDate || today();
+
+    const fields = [
+      "name", "role", "department", "status", "clearance",
+      "location", "createdDate", "background", "issues", "notes"
+    ];
+
+    fields.forEach(field => {
+      const element = $("#personForm").elements.namedItem(field);
+      if (element && person) element.value = person[field] ?? "";
+    });
+
+    $("#recordId").value = person?.id || "";
+    openModal("personModal");
+    $("#fullName").focus();
+  }
+
+  function openActivityModal() {
+    const person = people.find(p => p.id === selectedId);
+    if (!person) {
+      showToast("Select a profile first.", true);
+      return;
+    }
+
+    $("#activityForm").reset();
+    $("#activityDate").value = today();
+    openModal("activityModal");
+  }
+
+  function openCustomModal() {
+    if (!people.some(p => p.id === selectedId)) {
+      showToast("Select a profile first.", true);
+      return;
+    }
+
+    $("#customForm").reset();
+    openModal("customModal");
+  }
+
+  $("#personForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const form = new FormData(event.currentTarget);
+    const existing = people.find(p => p.id === editingId);
+
+    const person = {
+      ...(existing || {}),
+      id: editingId || String(form.get("recordId") || "").trim() || makeId(),
+      name: String(form.get("name") || "").trim(),
+      role: String(form.get("role") || "").trim(),
+      department: String(form.get("department") || "").trim(),
+      status: String(form.get("status") || "Active"),
+      clearance: String(form.get("clearance") || "Unassigned"),
+      location: String(form.get("location") || "").trim(),
+      createdDate: String(form.get("createdDate") || ""),
+      background: String(form.get("background") || "").trim(),
+      issues: String(form.get("issues") || "").trim(),
+      notes: String(form.get("notes") || "").trim(),
+      activities: existing?.activities || [],
+      customFields: existing?.customFields || []
+    };
+
+    if (!person.name) {
+      showToast("A name is required.", true);
+      return;
+    }
+
+    const duplicate = people.find(p =>
+      p.id === person.id && p.id !== editingId
+    );
+
+    if (duplicate) {
+      showToast("That record ID is already in use.", true);
+      return;
+    }
+
+    try {
+      await savePerson(person, !editingId);
+      closeModal("personModal");
+      showToast(editingId ? "Record updated." : "Record created.");
+    } catch (error) {
+      showToast("Could not save record: " + error.message, true);
+    }
+  });
+
+  $("#activityForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const person = people.find(p => p.id === selectedId);
+    if (!person) return;
+
+    const form = new FormData(event.currentTarget);
+
+    const entry = {
+      id: makeId(),
+      date: String(form.get("date") || ""),
+      type: String(form.get("type") || "General Update"),
+      title: String(form.get("title") || "").trim(),
+      description: String(form.get("description") || "").trim(),
+      author: String(form.get("author") || "").trim()
+    };
+
+    person.activities.push(entry);
+
+    try {
+      await savePerson(person, false);
+      closeModal("activityModal");
+      showToast("Activity entry saved.");
+    } catch (error) {
+      person.activities = person.activities.filter(a => a.id !== entry.id);
+      renderAll();
+      showToast("Could not save activity: " + error.message, true);
+    }
+  });
+
+  $("#customForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const person = people.find(p => p.id === selectedId);
+    if (!person) return;
+
+    const form = new FormData(event.currentTarget);
+
+    const field = {
+      id: makeId(),
+      label: String(form.get("label") || "").trim(),
+      value: String(form.get("value") || "").trim()
+    };
+
+    person.customFields.push(field);
+
+    try {
+      await savePerson(person, false);
+      closeModal("customModal");
+      showToast("Custom field saved.");
+    } catch (error) {
+      person.customFields = person.customFields.filter(f => f.id !== field.id);
+      renderAll();
+      showToast("Could not save field: " + error.message, true);
+    }
+  });
+
+  async function removeActivity(personId, activityId) {
+    const person = people.find(p => p.id === personId);
+    if (!person) return;
+
+    if (!confirm("Delete this activity entry?")) return;
+
+    const original = [...person.activities];
+    person.activities = person.activities.filter(a => a.id !== activityId);
+
+    try {
+      await savePerson(person, false);
+      showToast("Activity entry deleted.");
+    } catch (error) {
+      person.activities = original;
+      renderAll();
+      showToast("Could not delete entry: " + error.message, true);
+    }
+  }
+
+  async function removeCustomField(personId, fieldId) {
+    const person = people.find(p => p.id === personId);
+    if (!person) return;
+
+    if (!confirm("Delete this custom field?")) return;
+
+    const original = [...person.customFields];
+    person.customFields = person.customFields.filter(f => f.id !== fieldId);
+
+    try {
+      await savePerson(person, false);
+      showToast("Custom field deleted.");
+    } catch (error) {
+      person.customFields = original;
+      renderAll();
+      showToast("Could not delete field: " + error.message, true);
+    }
+  }
+
+  function switchView(view) {
+    currentView = view;
+
+    document.querySelectorAll(".nav-item").forEach(button => {
+      button.classList.toggle("active", button.dataset.view === view);
+    });
+
+    $("#dashboardView").classList.toggle("hidden", view !== "dashboard");
+    $("#activityView").classList.toggle("hidden", view !== "activity");
+
+    $("#stats").classList.toggle("hidden", view !== "dashboard");
+    $("#pageTitle").textContent =
+      view === "activity" ? "Case Activity" :
+      view === "people" ? "Personnel Records" : "Personnel Dashboard";
+
+    $("#pageSubtitle").textContent =
+      view === "activity"
+        ? "Review  Agency activity across all profiles."
+        : "Manage  personnel profiles and associated records.";
+  }
+
+  document.querySelectorAll(".nav-item").forEach(button => {
+    button.addEventListener("click", () => {
+      switchView(button.dataset.view);
+    });
+  });
+
+  $("#addPersonBtn").addEventListener("click", () => openPersonModal());
+  $("#searchInput").addEventListener("input", renderPeopleList);
+  $("#statusFilter").addEventListener("change", renderPeopleList);
+  $("#printBtn").addEventListener("click", () => window.print());
+
+  $("#exportBtn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(people, null, 2)], {
+      type: "application/json"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "aia--personnel-records.json";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+
+    showToast("JSON export prepared.");
+  });
+
+  document.querySelectorAll("[data-close]").forEach(button => {
+    button.addEventListener("click", () => closeModal(button.dataset.close));
+  });
+
+  document.querySelectorAll(".modal-backdrop").forEach(backdrop => {
+    backdrop.addEventListener("click", event => {
+      if (event.target === backdrop) closeModal(backdrop.id);
+    });
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      document.querySelectorAll(".modal-backdrop").forEach(modal => {
+        modal.classList.add("hidden");
+      });
+    }
+  });
+
+  $("#activityDate").value = today();
+  $("#createdDate").value = today();
+
+  loadPeople();
+</script>
+</body>
+</html>

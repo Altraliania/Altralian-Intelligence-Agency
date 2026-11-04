@@ -1,16 +1,8 @@
 # AIA — Altralian Intelligence Agency
 
-The Altralian Intelligence Agency is a  Agency tasked to host all information given to the AIA which stores it on a secure database
+The Altralian Intelligence Agency is a Agency which is a secure database holding Information legeally allowed by UTAR Law (United Territories of the Altralian Republic)
 
-## Run locally
+## Information
 
-1. Install Node.js.
-2. Copy `.env.example` to `.env`.
-3. Set `ADMIN_PASSWORD` to a strong private password.
-4. Set `SESSION_SECRET` to a long random value.
-5. Run `npm install` and `npm start`.
-6. Open http://localhost:3000.
-
-Do not commit `.env` to GitHub. `.gitignore` excludes it.
-# Altralian-Intelligence-Agency
-# Altralian-Intelligence-Agency
+By Accessing the AIA, you follow all AIA Terms and was given permission by an AIA member to access this page.
+The AIA is a Agency part of the United Territories of the Altralian Republic
