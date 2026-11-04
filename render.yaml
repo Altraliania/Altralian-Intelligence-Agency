@@ -7,6 +7,10 @@ services:
     startCommand: npm start
     healthCheckPath: /healthz
     envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AIA_ACCESS_USERNAME
+        value: AIA
       - key: DATA_DIR
         value: /var/data
       - key: AIA_ACCESS_PASSWORD
