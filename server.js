@@ -2,20 +2,60 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
-const HOST = "127.0.0.1";
-const PORT = 3000;
+// Render supplies PORT and requires the server to bind to 0.0.0.0.
+const HOST = "0.0.0.0";
+const PORT = Number(process.env.PORT) || 3000;
 
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
 const PRIVATE_DIR = path.join(ROOT, "private");
-const PEOPLE_FILE = path.join(PRIVATE_DIR, "people.json");
+// Render mounts the persistent disk at /var/data. Locally, use ./private.
+const DATA_DIR = process.env.DATA_DIR || PRIVATE_DIR;
+const PEOPLE_FILE = path.join(DATA_DIR, "people.json");
 
 fs.mkdirSync(PUBLIC_DIR, { recursive: true });
 fs.mkdirSync(PRIVATE_DIR, { recursive: true });
+fs.mkdirSync(DATA_DIR, { recursive: true });
 
+// Seed the persistent disk from the repository file on its first deployment.
 if (!fs.existsSync(PEOPLE_FILE)) {
-  fs.writeFileSync(PEOPLE_FILE, "[]\n", "utf8");
+  const seedFile = path.join(PRIVATE_DIR, "people.json");
+  if (seedFile !== PEOPLE_FILE && fs.existsSync(seedFile)) {
+    fs.copyFileSync(seedFile, PEOPLE_FILE);
+  } else {
+    fs.writeFileSync(PEOPLE_FILE, "[]\n", "utf8");
+  }
+}
+
+function safeEqual(left, right) {
+  const a = Buffer.from(String(left));
+  const b = Buffer.from(String(right));
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
+// When AIA_ACCESS_PASSWORD is configured, the browser requests a login
+// before serving either the website or its API. Local development can omit it.
+function isAuthorized(req) {
+  if (!process.env.AIA_ACCESS_PASSWORD) return true;
+  const header = req.headers.authorization || "";
+  const match = header.match(/^Basic\\s+(.+)$/i);
+  if (!match) return false;
+
+  let decoded;
+  try {
+    decoded = Buffer.from(match[1], "base64").toString("utf8");
+  } catch {
+    return false;
+  }
+
+  const separator = decoded.indexOf(":");
+  if (separator < 0) return false;
+  const username = decoded.slice(0, separator);
+  const password = decoded.slice(separator + 1);
+  return safeEqual(username, process.env.AIA_ACCESS_USERNAME || "AIA") &&
+    safeEqual(password, process.env.AIA_ACCESS_PASSWORD);
 }
 
 function readPeople() {
@@ -95,8 +135,20 @@ function cleanPerson(input) {
 }
 
 const server = http.createServer(async (req, res) => {
+  if (!isAuthorized(req)) {
+    res.writeHead(401, {
+      "WWW-Authenticate": 'Basic realm="Altralian Intelligence Agency", charset="UTF-8"',
+      "Cache-Control": "no-store"
+    });
+    return res.end("AIA access required.");
+  }
+
   try {
-    const url = new URL(req.url, `http://${HOST}:${PORT}`);
+    const url = new URL(req.url, "http://localhost");
+
+    if (url.pathname === "/healthz" && req.method === "GET") {
+      return sendJson(res, 200, { status: "ok" });
+    }
 
     if (url.pathname === "/api/people" && req.method === "GET") {
       return sendJson(res, 200, readPeople());
@@ -193,7 +245,9 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`AIA running at http://${HOST}:${PORT}`);
-  console.log(`Private records file: ${PEOPLE_FILE}`);
-  console.log("This server only listens on this computer.");
+  console.log(`AIA running on ${HOST}:${PORT}`);
+  console.log(`Personnel records file: ${PEOPLE_FILE}`);
+  console.log(process.env.AIA_ACCESS_PASSWORD
+    ? "AIA browser password protection is enabled."
+    : "WARNING: AIA access password is not configured.");
 });
