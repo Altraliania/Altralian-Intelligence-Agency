@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: altralian-intelligence-agency
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+      - key: AIA_ACCESS_PASSWORD
+        sync: false
+    disk:
+      name: aia-data
+      mountPath: /var/data
+      sizeGB: 1
